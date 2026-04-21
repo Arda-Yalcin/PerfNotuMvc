@@ -112,9 +112,10 @@ namespace MuzikSitesi.Controllers
         {
             if(id != null)
             {
-                var album = _context.Albumler.Find(id);
+                var album = _context.Albumler.FirstOrDefault(x=>x.Id==id);
                 if(album != null)
                 {
+                    ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
                     return View(album);
                 }
             }
@@ -122,44 +123,55 @@ namespace MuzikSitesi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Album album,IFormFile Fotom)
+        public IActionResult Edit(Album album,IFormFile Foto)
         {
-            if(Fotom == null)
+            if(ModelState.IsValid)
             {
-                var albumim=_context.Albumler.FirstOrDefault(x=>x.Id==album.Id);
-                _context.Albumler.Remove(albumim);
-                _context.Albumler.Add(album);
-                return RedirectToAction("Index","Album");
-            }
-            else
-            {
-                
-                //FotoÄŸrafÄ±n uzantÄ±sÄ±nÄ± almak
-                var uzanti=Path.GetExtension(Fotom.FileName);
-                var yendiAd=Guid.NewGuid()+ uzanti;
-                var yol=Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\img",yendiAd);
-
-                if(Fotom.ContentType=="image/png"|| Fotom.ContentType=="image/jpeg" ||Fotom.ContentType=="image/jpg")
+                var existingAlbum = _context.Albumler.FirstOrDefault(x=>x.Id==album.Id);
+                if(existingAlbum != null)
                 {
-                    using(var stream=new FileStream(yol,FileMode.Create))
+                    existingAlbum.Ad = album.Ad;
+                    existingAlbum.GrupId = album.GrupId;
+                    
+                    if(Foto != null)
                     {
-                        try
+                        //Fotoðrafýn uzantýsýný almak
+                        var uzanti=Path.GetExtension(Foto.FileName);
+                        var yendiAd=Guid.NewGuid()+"."+ uzanti;
+                        var yol=Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\img",yendiAd);
+
+                        if(Foto.ContentType=="image/png"|| Foto.ContentType=="image/jpeg" ||Foto.ContentType=="image/jpg")
                         {
-                            Fotom.CopyTo(stream);
-                            var albumum=_context.Albumler.FirstOrDefault(x=>x.Id==album.Id);
-                            _context.Albumler.Remove(albumum);
-                            album.Foto=yendiAd;
-                            _context.Albumler.Add(album);
-                            return RedirectToAction("Index","Album");
-                        }
-                        catch (Exception ex)
-                        {
-                            ViewBag.Hata="Dosya YÃ¼kleme HatasÄ± :"+ex.Message;
+                            using(var stream=new FileStream(yol,FileMode.Create))
+                            {
+                                try
+                                {
+                                    Foto.CopyTo(stream);
+                                    existingAlbum.Foto = yendiAd;
+                                }
+                                catch (Exception ex)
+                                {
+                                    ViewBag.Hata="Dosya Yükleme Hatasý :"+ex.Message;
+                                    ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
+                                    return View(album);
+                                }
+                            }
+                        } else { 
+                            ViewBag.Hata="jpg ya da png Yükle";
+                            ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
+                            return View(album);
                         }
                     }
-                } else { ViewBag.Hata="jpg ya da png YÃ¼kle";}
+                    
+                    _context.SaveChanges();
+                    return RedirectToAction("Index","Album");
+                }
             }
+            ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
             return View(album);
         }
+
     }
 }
+
+
