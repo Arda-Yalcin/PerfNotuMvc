@@ -1,0 +1,49 @@
+@model Album;
+
+
+@if(ViewBag.Hata!=null){
+    <p class="text-danger my-2">@ViewBag.Hata</p>
+}
+
+<form asp-action="Edit" asp-controller="Album" method="post" enctype="multipart/form-data">
+
+    <div class="container">
+        <form>
+            <div class="mb-3 row">
+                <label for="inputName" class="col-4 col-form-label" >Ad</label>
+                <div class="col-8">         
+                    <input type="text" class="form-control" name="Ad" id="inputName" placeholder="Ad" value="@Model.Ad" />
+                </div>
+            </div>
+
+
+            <div class="mb-3 row">
+                <label for="inputName" class="col-4 col-form-label"> Fotoğraf</label>
+                <div class="col-8">
+                    <div class="mb-3">
+                        <img src="/img/@Model.Foto" class="img-fluid rounded-top" style="width: 350px;" alt="" />
+                        <input type="file" class="form-control" name="Fotom" id="inputName" placeholder="Fotoğraf Yükle" aria-describedby="fileHelpId" />
+                    </div>
+                    
+                </div>
+            </div>
+            <input type="hidden" name="Id" value=@Model.Id>
+            <input type="hidden" name="Foto" value=@Model.Foto>
+
+
+
+            <div class="mb-3 row">
+                <div class="offset-sm-4 col-sm-8">
+                    <button type="submit" class="btn btn-primary">
+                        Action
+                    </button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+
+
+</form>

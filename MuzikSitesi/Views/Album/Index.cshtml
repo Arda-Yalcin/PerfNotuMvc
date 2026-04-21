@@ -1,0 +1,25 @@
+@model List<MuzikSitesi.Models.Album>
+
+
+<h2>Album Listesi</h2>
+
+
+<a asp-action="Ekle" type="button" class="btn btn-success">+Yeni Album Ekle</a>
+
+
+@foreach (var album in Model){
+    <div class="card">
+        <img
+            style="width: 60%; height: 300px; "
+            src="img/@album.Foto"
+            alt="Card image cap"
+        />
+        <div class="card-body" >
+            <h4 class="card-title"><strong>Album:</strong> @album.Ad</h4>
+            <p class="card-text"><strong>Grup:</strong> @album.Grup?.Ad</p>
+            <a asp-action="Sil" asp-route-id="@album.Id" type="button" class=" btn btn-outline-danger">Sil</a>
+            <a asp-action="Düzenle" asp-route-id="@album.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+        </div>
+    </div>
+}   
+

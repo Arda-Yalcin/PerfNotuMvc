@@ -1,0 +1,29 @@
+@model List<MuzikSitesi.Models.Grup>
+<h2>Grup Listesi</h2>
+
+<a asp-action="Ekle" type="button" class="btn btn-success">+Yeni Grup Ekle</a>
+
+
+
+@foreach (var grup in Model){
+    <div class="card" style="margin-bottom:15px;">
+        
+        <div class="card-body">
+            <h4 class="card-title">@grup.Ad</h4>
+            @if(!string.IsNullOrEmpty(grup.Kurucusu))
+            {
+                <p><strong>Kurucusu:</strong> @grup.Kurucusu</p>
+            }
+            @if(!string.IsNullOrEmpty(grup.Katilimcilar))
+            {
+                <p><strong>Katılımcılar:</strong> @grup.Katilimcilar</p>
+            }
+            <a asp-action="Sil" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-danger">Sil</a>
+            <a asp-action="Edit" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+        </div>
+        
+    </div>
+}
+
+
+

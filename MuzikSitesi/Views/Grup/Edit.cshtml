@@ -1,0 +1,24 @@
+@model MuzikSitesi.Models.Grup
+
+<h2>Grup Düzenle</h2>
+
+<form asp-action="Edit" method="post">
+
+    <div class="form-group" style="margin-bottom:15px;">
+        <label class="form-label">Grup Adı</label>
+        <input asp-for="Ad" class="form-control" placeholder="Grup Adı Giriniz" required />
+    </div>
+
+    <div class="form-group" style="margin-bottom:15px;">
+        <label class="form-label">Kurucusu</label>
+        <input asp-for="Kurucusu" class="form-control" placeholder="Grubun Kurucusunu Giriniz" />
+    </div>
+
+    <div class="form-group" style="margin-bottom:15px;">
+        <label class="form-label">Katılımcılar</label>
+        <textarea asp-for="Katilimcilar" class="form-control" placeholder="Katılımcıları virgülle ayırarak giriniz (örn: Ali, Ayşe, Mehmet)" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary" style="margin-left:10px;">İptal et ve Listeye dön</a>
+</form>
