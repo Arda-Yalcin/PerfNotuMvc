@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MuzikSitesi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+24d8ee3c2b546883f903c51a6413d9c97febbfc1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb5f407114d3e0f37ce7eac27ad86d19553825ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("MuzikSitesi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MuzikSitesi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
