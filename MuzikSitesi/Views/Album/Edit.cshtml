@@ -36,6 +36,13 @@
             </div>
         </div>
 
+        <div class="mb-3 row">
+            <label for="stockInput" class="col-4 col-form-label">Stok Miktarı</label>
+            <div class="col-8">
+                <input type="number" class="form-control" name="Stock" id="stockInput" placeholder="Stok miktarını giriniz" value="@Model.Stock" min="0" required />
+            </div>
+        </div>
+
         <input type="hidden" name="Id" value="@Model.Id" />
 
         <div class="mb-3 row">

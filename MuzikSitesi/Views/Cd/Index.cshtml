@@ -1,0 +1,73 @@
+@model List<MuzikSitesi.Models.Cd>
+
+@using MuzikSitesi.Data
+@using System.Linq
+@using System.Security.Claims
+@inject AppDbContext DbContext
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var cartItems = userId != null ? DbContext.SepetKalemleri.Where(c => c.AppUserId == userId).ToList() : new List<CartItem>();
+}
+
+<h2>CD Listesi</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (User?.IsInRole("Admin") == true)
+{
+    <a asp-action="Ekle" type="button" class="btn btn-success" style="margin-bottom: 30px; margin-top: 20px;">+Yeni CD Ekle</a>
+}
+
+<div class="row">
+    @foreach (var cd in Model)
+    {
+        var cartQuantity = cartItems.FirstOrDefault(c => c.CdId == cd.Id)?.Quantity ?? 0;
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <img src="img/@cd.Foto" alt="" class="img-fluid mb-3">
+                    <h4 class="card-title" style="margin-bottom: 20px;"><strong>CD:</strong> @cd.Ad</h4>
+                    <p class="card-text" style="margin-bottom: 20px;"><strong>Grup:</strong> @cd.Grup?.Ad</p>
+                    <p class="card-text"><strong>Stok:</strong> @cd.Stock adet</p>
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        <p class="card-text"><strong>Sepette:</strong> @cartQuantity adet</p>
+                    }
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline me-1">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="cdId" value="@cd.Id" />
+                        <button type="submit" class="btn btn-success">Sepete Ekle</button>
+                    </form>
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        @if (cd.Stock > 0)
+                        {
+                            <form asp-action="Rent" method="post" class="d-inline me-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@cd.Id" />
+                                <button type="submit" class="btn btn-warning">Kirala</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Stokta Yok</span>
+                        }
+                    }
+                    @if (User?.IsInRole("Admin") == true)
+                    {
+                        <a asp-action="Sil" asp-route-id="@cd.Id" type="button" class="btn btn-outline-danger">Sil</a>
+                        <a asp-action="Edit" asp-route-id="@cd.Id" type="button" class="btn btn-outline-primary">Düzenle</a>
+                    }
+                    else if (User?.Identity?.IsAuthenticated != true)
+                    {
+                        <p class="text-muted">Giriş yaparak sepete ekleyebilir veya CD kiralayabilirsiniz.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

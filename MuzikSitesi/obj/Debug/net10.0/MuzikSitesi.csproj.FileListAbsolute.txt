@@ -2,7 +2,6 @@ C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\appsett
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\appsettings.json
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.staticwebassets.runtime.json
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.staticwebassets.endpoints.json
-C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.exe
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.deps.json
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.runtimeconfig.json
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.dll
@@ -138,7 +137,6 @@ C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\rjsmcsh
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\scopedcss\bundle\MuzikSitesi.styles.css
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\scopedcss\projectbundle\MuzikSitesi.bundle.scp.css
-C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\9s1v1ag987-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\euolwavu6r-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\v44qoqwbho-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\dshhn5j4k0-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -214,3 +212,5 @@ C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\MuzikSi
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\MuzikSitesi.genruntimeconfig.cache
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\ref\MuzikSitesi.dll
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\9s1v1ag987-{0}-fyzogj6gri-fyzogj6gri.gz
+C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.exe

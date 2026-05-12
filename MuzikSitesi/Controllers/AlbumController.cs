@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MuzikSitesi.Data;
 using MuzikSitesi.Models;
-using MuzikSitesi.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MuzikSitesi.Controllers
@@ -30,7 +30,8 @@ namespace MuzikSitesi.Controllers
             return View (albumler);
         }
 
-         public IActionResult Ekle()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Ekle()
         {
             //   Veritabanındaki kategorileri çekip dropdown için viewbag içine atıyoruz
             //   "Id" arka planda kaydedilecek değer, "Ad" ise kullanıcıya gösterilecek metindir.
@@ -40,6 +41,7 @@ namespace MuzikSitesi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Ekle(Album album, IFormFile Foto)
         {
             //Model kurallarına uyuyorsa veri tabanına ekle
@@ -80,6 +82,7 @@ namespace MuzikSitesi.Controllers
 
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Sil(int? id)
         {
 
@@ -95,6 +98,7 @@ namespace MuzikSitesi.Controllers
 
         [HttpPost, ActionName("Sil")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult SilOnay(int id)
         {
             var album = _context.Albumler.Find(id);
@@ -108,21 +112,20 @@ namespace MuzikSitesi.Controllers
 
 
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
-            if(id != null)
+            var album = _context.Albumler.FirstOrDefault(x => x.Id == id);
+            if (album != null)
             {
-                var album = _context.Albumler.FirstOrDefault(x=>x.Id==id);
-                if(album != null)
-                {
-                    ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
-                    return View(album);
-                }
+                ViewBag.GrupListesi = new SelectList(_context.Gruplar, "Id", "Ad");
+                return View(album);
             }
             return NotFound();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(Album album,IFormFile Foto)
         {
             if(ModelState.IsValid)
@@ -132,6 +135,7 @@ namespace MuzikSitesi.Controllers
                 {
                     existingAlbum.Ad = album.Ad;
                     existingAlbum.GrupId = album.GrupId;
+                    existingAlbum.Stock = album.Stock;
                     
                     if(Foto != null)
                     {

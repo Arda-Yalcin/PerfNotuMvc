@@ -1,0 +1,17 @@
+@model MuzikSitesi.Models.Cd
+
+<h2 class="text-danger">Kayıt Sil</h2>
+<h3>Bu CD'yi silmek istediğinizden emin misiniz</h3>
+
+<div style="border: 1px solid #ddd; padding:20px; border-radius:8px;" >
+    <p><strong>CD Adı:</strong>@Model.Ad</p>
+    <p><strong>Fotoğrafı</strong><img src="~/img/@Model.Foto" class="img-fluid" /></p>
+    <p><strong>Grup Adı:</strong> @Model.Grup?.Ad</p>
+    
+    <form asp-action="Sil" method="post">
+        <input type="hidden" asp-for="Id">
+
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+    </form>
+</div>

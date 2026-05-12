@@ -1,0 +1,31 @@
+@model IEnumerable<AppUser>
+
+@{
+    ViewData["Title"] = "Kullanıcılar";
+}
+
+<h2>Kullanıcılar</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Adres</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Ad</td>
+                <td>@user.Soyad</td>
+                <td>@user.Email</td>
+                <td>@user.Telefon</td>
+                <td>@user.Adres</td>
+            </tr>
+        }
+    </tbody>
+</table>

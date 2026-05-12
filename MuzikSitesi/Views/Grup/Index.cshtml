@@ -1,9 +1,10 @@
 @model List<MuzikSitesi.Models.Grup>
 <h2>Grup Listesi</h2>
 
-<a asp-action="Ekle" type="button" class="btn btn-success" style="margin-bottom: 30px; margin-top: 20px;">+Yeni Grup Ekle</a>
-
-
+@if (User?.IsInRole("Admin") == true)
+{
+    <a asp-action="Ekle" type="button" class="btn btn-success" style="margin-bottom: 30px; margin-top: 20px;">+Yeni Grup Ekle</a>
+}
 
 @foreach (var grup in Model){
     <div class="card" style="margin-bottom:15px;">
@@ -18,8 +19,11 @@
             {
                 <p><strong>Katılımcılar:</strong> @grup.Katilimcilar</p>
             }
-            <a asp-action="Sil" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-danger">Sil</a>
-            <a asp-action="Edit" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+            @if (User?.IsInRole("Admin") == true)
+            {
+                <a asp-action="Sil" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-danger">Sil</a>
+                <a asp-action="Edit" asp-route-id="@grup.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+            }
         </div>
         
     </div>

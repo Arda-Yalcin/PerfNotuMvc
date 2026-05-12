@@ -1,0 +1,53 @@
+@model List<MuzikSitesi.Models.CdRental>
+
+<h2>Kiralamalarım</h2>
+
+<div class="alert alert-warning">
+    Kiralama süresi sabittir: <strong>15 gün</strong>. Aşağıda en geç teslim tarihi gösterilmektedir.
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz kiralanmış CD'niz yok.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>CD</th>
+                <th>Grup</th>
+                <th>Kiralanma Tarihi</th>
+                <th>Son Teslim Tarihi</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model)
+            {
+                var dueDate = rental.DueDate.ToLocalTime();
+                var overdue = !rental.IsReturned && dueDate < DateTime.Now;
+                <tr class="@(overdue ? "table-danger" : "")">
+                    <td>@rental.Cd?.Ad</td>
+                    <td>@rental.Cd?.Grup?.Ad</td>
+                    <td>@rental.RentDate.ToLocalTime().ToString("g")</td>
+                    <td>@dueDate.ToString("g")</td>
+                    <td>
+                        @if (rental.IsReturned)
+                        {
+                            <span class="badge bg-success">İade Edildi</span>
+                        }
+                        else if (overdue)
+                        {
+                            <span class="badge bg-danger">Süre Aşımı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary">Kirada</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

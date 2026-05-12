@@ -51,7 +51,7 @@ namespace MuzikSitesi.Controllers
                 await _userManager.AddClaimAsync(user,new Claim("TamAd",user.Ad+" ",user.Soyad));
                 await _userManager.AddToRoleAsync(user,"Member");
                 await _signInManager.SignInAsync(user,isPersistent :false);
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Album");
             }
             foreach(var hata in sonuc.Errors)
             {
@@ -77,7 +77,7 @@ namespace MuzikSitesi.Controllers
             );
             if(sonuc.Succeeded)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","Album");
             }
             if (sonuc.IsLockedOut)
             {
@@ -93,7 +93,7 @@ namespace MuzikSitesi.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index","Album");
         }
     }
 }

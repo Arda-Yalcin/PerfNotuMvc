@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -26,12 +27,14 @@ namespace MuzikSitesi.Controllers
             return View (gruplar);
         }
 
-         public IActionResult Ekle()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Ekle()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Ekle(Grup grup)
         {
             if (ModelState.IsValid)
@@ -44,6 +47,7 @@ namespace MuzikSitesi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -53,6 +57,7 @@ namespace MuzikSitesi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(Grup grup)
         {
             if (ModelState.IsValid)
@@ -66,6 +71,7 @@ namespace MuzikSitesi.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Sil(int? id)
         {
 
@@ -79,6 +85,7 @@ namespace MuzikSitesi.Controllers
 
         [HttpPost, ActionName("Sil")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult SilOnay(int id)
         {
             bool bagliAlbumVarmi= _context.Albumler.Any(u => u.GrupId == id);

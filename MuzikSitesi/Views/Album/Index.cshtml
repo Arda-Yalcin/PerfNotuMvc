@@ -1,21 +1,49 @@
 @model List<MuzikSitesi.Models.Album>
 
+@using MuzikSitesi.Data
+@using System.Linq
+@using System.Security.Claims
+@inject AppDbContext DbContext
+
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var cartItems = userId != null ? DbContext.SepetKalemleri.Where(c => c.AppUserId == userId).ToList() : new List<CartItem>();
+}
 
 <h2>Album Listesi</h2>
 
-
-<a asp-action="Ekle" type="button" class="btn btn-success" style="margin-bottom: 30px; margin-top: 20px;">+Yeni Album Ekle</a>
+@if (User?.IsInRole("Admin") == true)
+{
+    <a asp-action="Ekle" type="button" class="btn btn-success" style="margin-bottom: 30px; margin-top: 20px;">+Yeni Album Ekle</a>
+}
 
 <div class="row">
     @foreach (var album in Model){
+        var cartQuantity = cartItems.FirstOrDefault(c => c.AlbumId == album.Id)?.Quantity ?? 0;
         <div class="col-md-4 mb-3">
-            <div class="card" style="height: 400px;">
+            <div class="card">
                 <div class="card-body">
-                    <img src="img/@album.Foto" alt="">
+                    <img src="img/@album.Foto" alt="" class="img-fluid mb-3">
                     <h4 class="card-title" style="margin-bottom: 20px;"><strong>Album:</strong> @album.Ad</h4>
                     <p class="card-text" style="margin-bottom: 20px;"><strong>Grup:</strong> @album.Grup?.Ad</p>
-                    <a asp-action="Sil" asp-route-id="@album.Id" type="button" class=" btn btn-outline-danger">Sil</a>
-                    <a asp-action="Edit" asp-route-id="@album.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        <p class="card-text"><strong>Sepette:</strong> @cartQuantity adet</p>
+                    }
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="albumId" value="@album.Id" />
+                        <button type="submit" class="btn btn-success">Sepete Ekle</button>
+                    </form>
+                    @if (User?.IsInRole("Admin") == true)
+                    {
+                        <a asp-action="Sil" asp-route-id="@album.Id" type="button" class=" btn btn-outline-danger">Sil</a>
+                        <a asp-action="Edit" asp-route-id="@album.Id" type="button" class=" btn btn-outline-primary">Düzenle</a>
+                    }
+                    else if (User?.Identity?.IsAuthenticated != true)
+                    {
+                        <p class="text-muted">Giriş yaparak sepete ekleyebilir ve içeriği yönetebilirsiniz.</p>
+                    }
                 </div>
             </div>
         </div>

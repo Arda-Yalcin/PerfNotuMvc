@@ -54,6 +54,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWxidW1cU2lsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Cart/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Cd/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2RcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Cd/Ekle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2RcRWtsZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Cd/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2RcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Cd/Sil.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2RcU2lsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Grup/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3J1cFxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -74,8 +94,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Rentals/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Shared/Error.cshtml]
@@ -84,6 +104,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/Users/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Lab1/Documents/GitHub/PerfNotuMvc/MuzikSitesi/Views/_ViewImports.cshtml]

@@ -160,6 +160,9 @@ namespace MuzikSitesi.Migrations
                     b.Property<int>("GrupId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Stock")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GrupId");
@@ -247,6 +250,92 @@ namespace MuzikSitesi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("MuzikSitesi.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AlbumId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("CdId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlbumId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("CdId");
+
+                    b.ToTable("SepetKalemleri");
+                });
+
+            modelBuilder.Entity("MuzikSitesi.Models.Cd", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Ad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Foto")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("GrupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupId");
+
+                    b.ToTable("Cdler");
+                });
+
+            modelBuilder.Entity("MuzikSitesi.Models.CdRental", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CdId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsReturned")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("RentDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("CdId");
+
+                    b.ToTable("CdKiralamalari");
+                });
+
             modelBuilder.Entity("MuzikSitesi.Models.Grup", b =>
                 {
                     b.Property<int>("Id")
@@ -327,6 +416,59 @@ namespace MuzikSitesi.Migrations
                         .IsRequired();
 
                     b.Navigation("Grup");
+                });
+
+            modelBuilder.Entity("MuzikSitesi.Models.CartItem", b =>
+                {
+                    b.HasOne("MuzikSitesi.Models.Album", "Album")
+                        .WithMany()
+                        .HasForeignKey("AlbumId");
+
+                    b.HasOne("MuzikSitesi.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MuzikSitesi.Models.Cd", "Cd")
+                        .WithMany()
+                        .HasForeignKey("CdId");
+
+                    b.Navigation("Album");
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Cd");
+                });
+
+            modelBuilder.Entity("MuzikSitesi.Models.Cd", b =>
+                {
+                    b.HasOne("MuzikSitesi.Models.Grup", "Grup")
+                        .WithMany()
+                        .HasForeignKey("GrupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Grup");
+                });
+
+            modelBuilder.Entity("MuzikSitesi.Models.CdRental", b =>
+                {
+                    b.HasOne("MuzikSitesi.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MuzikSitesi.Models.Cd", "Cd")
+                        .WithMany()
+                        .HasForeignKey("CdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Cd");
                 });
 
             modelBuilder.Entity("MuzikSitesi.Models.Grup", b =>

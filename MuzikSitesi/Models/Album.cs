@@ -14,5 +14,6 @@ namespace MuzikSitesi.Models
         //
         public int GrupId { get; set; }
         public Grup? Grup {get; set;}
+        public int Stock { get; set; } = 0;
     }
 }
