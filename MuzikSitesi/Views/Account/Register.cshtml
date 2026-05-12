@@ -1,0 +1,51 @@
+@model MuzikSitesi.Models.ViewModels.RegisterViewModel
+
+<div class="row justify-content-center">
+  <div class="col-md-6 border p-4 shadow-sm rounded bg-light">
+        <h3>Üye Kaydı</h3>
+        <form asp-action="Register" asp-controller="Account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Ad" class="form-label">Ad</label>
+                    <input asp-for=Ad class="form-control">
+                    <span asp-validation-for="Ad" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Soyad" class="form-label">Soyad</label>
+                    <input asp-for=Soyad class="form-control">
+                    <span asp-validation-for="Soyad" class="text-danger"></span>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label asp-for="Adres" class="form-label">Adres</label>
+                    <textarea asp-for=Adres class="form-control"></textarea>
+                    <span asp-validation-for="Adres" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Telefon" class="form-label">Telefon</label>
+                    <input asp-for=Telefon class="form-control" placeholder="05xx xxx xx xx">
+                    <span asp-validation-for="Telefon" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for=Email class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for=Password class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">ConfirmPassword</label>
+                    <input asp-for=ConfirmPassword class="form-control">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary w-100"> Kayıt Ol</button>
+            </div>
+        </form>
+
+    </div>
+</div>

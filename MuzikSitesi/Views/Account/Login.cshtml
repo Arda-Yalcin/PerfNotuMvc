@@ -1,0 +1,33 @@
+@model MuzikSitesi.Models.ViewModels.LoginViewModel
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4 border p-4 shadow-sm rounded">
+        <h2 class="text-center mb-4">Üye Girişi</h2>
+
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">E-posta</label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Şifre</label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="RememberMe" class="form-check-input" />
+                <label asp-for="RememberMe" class="form-check-label">Beni Hatırla</label>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Giriş Yap</button>
+        </form>
+        
+        <div class="mt-3 text-center">
+            <a asp-action="Register" class="text-decoration-none">Henüz üye değil misiniz? Kayıt olun.</a>
+        </div>
+    </div>
+</div>

@@ -213,3 +213,4 @@ C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\refint\
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\MuzikSitesi.pdb
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\MuzikSitesi.genruntimeconfig.cache
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\ref\MuzikSitesi.dll
+C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

@@ -135,7 +135,7 @@ namespace MuzikSitesi.Controllers
                     
                     if(Foto != null)
                     {
-                        //Fotoðrafýn uzantýsýný almak
+                        //FotoÄŸrafÄ±n uzantÄ±sÄ±nÄ± almak
                         var uzanti=Path.GetExtension(Foto.FileName);
                         var yendiAd=Guid.NewGuid()+"."+ uzanti;
                         var yol=Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\img",yendiAd);
@@ -151,13 +151,13 @@ namespace MuzikSitesi.Controllers
                                 }
                                 catch (Exception ex)
                                 {
-                                    ViewBag.Hata="Dosya Yükleme Hatasý :"+ex.Message;
+                                    ViewBag.Hata="Dosya YÃ¼kleme HatasÄ± :"+ex.Message;
                                     ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
                                     return View(album);
                                 }
                             }
                         } else { 
-                            ViewBag.Hata="jpg ya da png Yükle";
+                            ViewBag.Hata="jpg ya da png YÃ¼kle";
                             ViewBag.GrupListesi=new SelectList(_context.Gruplar,"Id","Ad");
                             return View(album);
                         }

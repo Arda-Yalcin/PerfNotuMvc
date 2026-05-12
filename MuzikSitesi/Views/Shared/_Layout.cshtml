@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject UserManager<AppUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,6 +33,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Album" asp-action="Ekle">Albüm Ekle</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if(SignInManager.IsSignedIn(User)){
+                        
+                        <li class="nav-item mt-2 me-2">
+                            @User.FindFirst("TamAd")?.Value
+                        </li>
+                        <li>
+                            <form asp-action="Logout" asp-controller="Account" method="post">
+                                <button type="submit" class="btn btn-outline-primary">Çıkış</button>
+                            </form>
+                        </li>
+                        }else{
+                            <li class="nav-item">
+                                <a asp-action="Login" asp-controller="Account">Giriş Yap</a>
+                            </li>
+                        }   
                     </ul>
                 </div>
             </div>
