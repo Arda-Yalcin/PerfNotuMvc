@@ -8,12 +8,19 @@
 @{
     bool isSignedIn = SignInManager.IsSignedIn(User);
     int cartCount = 0;
+    int overdueRentalCount = 0;
     if (isSignedIn)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         cartCount = DbContext.SepetKalemleri
             .Where(c => c.AppUserId == userId)
             .Sum(c => c.Quantity);
+        overdueRentalCount = DbContext.CdKiralamalari
+            .Count(r => r.AppUserId == userId
+                && r.IsApproved
+                && !r.IsReturned
+                && r.ApprovalDate.HasValue
+                && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow);
     }
 }
 <!DOCTYPE html>
@@ -95,6 +102,16 @@
                 </div>
             </div>
         </nav>
+        @if (overdueRentalCount > 0)
+        {
+            <div class="overdue-site-warning" role="alert">
+                <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                    <strong>Gecikmiş iadeniz var!</strong>
+                    <span>@overdueRentalCount adet CD'nin iade tarihi geçti. Lütfen en kısa sürede iade işlemi başlatın.</span>
+                    <a asp-controller="Rentals" asp-action="Index" class="btn btn-light btn-sm">Kiralamalarımı Gör</a>
+                </div>
+            </div>
+        }
     </header>
     <div class="container">
         <main role="main" class="pb-3">

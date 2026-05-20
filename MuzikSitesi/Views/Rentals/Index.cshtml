@@ -2,6 +2,10 @@
 
 @{
     var isAdmin = User?.IsInRole("Admin") == true;
+    var overdueCount = Model.Count(r => r.IsApproved
+        && !r.IsReturned
+        && r.ApprovalDate.HasValue
+        && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow);
 }
 
 <h2>@(isAdmin ? "Kiralama Talepleri" : "Kiralamalarım")</h2>
@@ -19,6 +23,13 @@
 <div class="alert alert-warning">
     Kiralama ve iade işlemleri yönetici onayından sonra tamamlanır. Kiralama süresi onaydan itibaren <strong>15 gün</strong> kabul edilir.
 </div>
+
+@if (overdueCount > 0)
+{
+    <div class="alert alert-danger fw-bold" role="alert">
+        @overdueCount adet kiralamanın son iade tarihi geçti. Kırmızı satırları kontrol edin.
+    </div>
+}
 
 @if (!Model.Any())
 {
@@ -46,9 +57,10 @@ else
         <tbody>
             @foreach (var rental in Model)
             {
-                var dueDate = rental.ApprovalDate?.AddDays(15).ToLocalTime();
-                var overdue = rental.IsApproved && !rental.IsReturned && dueDate != null && dueDate < DateTime.Now;
-                <tr class="@(overdue ? "table-danger" : "")">
+                var dueDateUtc = rental.ApprovalDate?.AddDays(15);
+                var dueDate = dueDateUtc?.ToLocalTime();
+                var overdue = rental.IsApproved && !rental.IsReturned && dueDateUtc.HasValue && dueDateUtc.Value < DateTime.UtcNow;
+                <tr class="@(overdue ? "table-danger overdue-rental-row" : "")">
                     @if (isAdmin)
                     {
                         <td>@(rental.AppUser?.Ad + " " + rental.AppUser?.Soyad)</td>
@@ -58,7 +70,7 @@ else
                     <td>@rental.Quantity</td>
                     <td>@rental.RentDate.ToLocalTime().ToString("g")</td>
                     <td>@(rental.ApprovalDate?.ToLocalTime().ToString("g") ?? "-")</td>
-                    <td>@(dueDate?.ToString("g") ?? "-")</td>
+                    <td class="@(overdue ? "fw-bold text-danger" : "")">@(dueDate?.ToString("g") ?? "-")</td>
                     <td>
                         @if (rental.IsReturned)
                         {
@@ -90,12 +102,12 @@ else
                                 <button type="submit" class="btn btn-success btn-sm">Kiralamayı Onayla</button>
                             </form>
                         }
-                        else if (isAdmin && rental.ReturnRequested && !rental.IsReturned)
+                        else if (isAdmin && rental.IsApproved && !rental.IsReturned)
                         {
-                            <form asp-action="ApproveReturn" asp-controller="Rentals" method="post" class="d-inline">
+                            <form asp-action="@(rental.ReturnRequested ? "ApproveReturn" : "DirectReturn")" asp-controller="Rentals" method="post" class="d-inline">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@rental.Id" />
-                                <button type="submit" class="btn btn-success btn-sm">İadeyi Onayla</button>
+                                <button type="submit" class="btn btn-danger btn-sm">@(rental.ReturnRequested ? "İadeyi Onayla" : "Direkt İade Al")</button>
                             </form>
                         }
                         else if (!isAdmin && rental.IsApproved && !rental.ReturnRequested && !rental.IsReturned)

@@ -48,7 +48,7 @@
                     <h5 class="card-title">@cd.Ad</h5>
                     <p class="card-text"><strong>Grup:</strong> @cd.Grup?.Ad</p>
                     <div class="d-grid gap-2">
-                        <a asp-controller="Cd" asp-action="Index" asp-route-selectedId="@cd.Id" class="btn btn-sm btn-outline-secondary">CD'ye Git: @cd.Ad</a>
+                        <a asp-controller="Cd" asp-action="Index" asp-route-selectedId="@cd.Id" asp-fragment="cd-@cd.Id" class="btn btn-sm btn-outline-secondary">CD'ye Git: @cd.Ad</a>
                     </div>
                 </div>
             </div>

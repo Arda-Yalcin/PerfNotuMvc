@@ -63,6 +63,33 @@ body {
   margin-left: 0.2rem;
 }
 
+.overdue-site-warning {
+  padding: 0.85rem 0;
+  color: #ffffff;
+  background: #dc2626;
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.32);
+  animation: overdueWarningPulse 1.5s ease-in-out infinite;
+}
+
+.overdue-site-warning strong {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+@keyframes overdueWarningPulse {
+  0%, 100% {
+    background: #dc2626;
+  }
+  50% {
+    background: #991b1b;
+  }
+}
+
+.overdue-rental-row > td {
+  border-top: 2px solid rgba(220, 38, 38, 0.35);
+  border-bottom: 2px solid rgba(220, 38, 38, 0.35);
+}
+
 .card {
   border: none;
   border-radius: 1.1rem;
@@ -91,6 +118,39 @@ body {
 
 .card:hover .card-title {
   color: #1d4ed8;
+}
+
+.cd-card {
+  position: relative;
+}
+
+.selected-cd-alert {
+  border: 1px solid rgba(37, 99, 235, 0.3);
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+.selected-cd-card {
+  border: 3px solid #2563eb;
+  box-shadow: 0 24px 70px rgba(37, 99, 235, 0.26);
+}
+
+.selected-cd-card .card-title {
+  color: #1d4ed8;
+}
+
+.selected-cd-badge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 2;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #2563eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
 }
 
 .btn,

@@ -101,6 +101,19 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult ApproveReturn(int id)
         {
+            return CompleteReturn(id, "İade onaylandı ve stok güncellendi.");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DirectReturn(int id)
+        {
+            return CompleteReturn(id, "CD direkt iade alındı ve stok güncellendi.");
+        }
+
+        private IActionResult CompleteReturn(int id, string successMessage)
+        {
             var rental = _context.CdKiralamalari
                 .Include(r => r.Cd)
                 .FirstOrDefault(r => r.Id == id);
@@ -110,7 +123,7 @@ namespace MuzikSitesi.Controllers
                 return NotFound();
             }
 
-            if (rental.IsApproved && rental.ReturnRequested && !rental.IsReturned)
+            if (rental.IsApproved && !rental.IsReturned)
             {
                 if (rental.Cd != null)
                 {
@@ -119,8 +132,10 @@ namespace MuzikSitesi.Controllers
 
                 rental.IsReturned = true;
                 rental.ReturnDate = DateTime.UtcNow;
+                rental.ReturnRequested = true;
+                rental.ReturnRequestDate ??= DateTime.UtcNow;
                 _context.SaveChanges();
-                TempData["Success"] = "İade onaylandı ve stok güncellendi.";
+                TempData["Success"] = successMessage;
             }
 
             return RedirectToAction("Index");

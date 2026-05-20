@@ -230,4 +230,5 @@ C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\artifacts\verify-build\MuzikSitesi.de
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\artifacts\verify-build\MuzikSitesi.runtimeconfig.json
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\artifacts\verify-build\MuzikSitesi.dll
 C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\artifacts\verify-build\MuzikSitesi.pdb
-C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\9s1v1ag987-{0}-6cux89aigp-6cux89aigp.gz
+C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\bin\Debug\net10.0\MuzikSitesi.exe
+C:\Users\Lab1\Documents\GitHub\PerfNotuMvc\MuzikSitesi\obj\Debug\net10.0\compressed\9s1v1ag987-{0}-jnba9k1jmn-jnba9k1jmn.gz

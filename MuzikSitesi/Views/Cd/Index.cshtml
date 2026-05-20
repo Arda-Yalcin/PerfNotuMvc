@@ -8,9 +8,19 @@
 @{
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     var cartItems = userId != null ? DbContext.SepetKalemleri.Where(c => c.AppUserId == userId).ToList() : new List<CartItem>();
+    var selectedIdText = Context.Request.Query["selectedId"].FirstOrDefault();
+    var selectedId = int.TryParse(selectedIdText, out var parsedSelectedId) ? parsedSelectedId : (int?)null;
+    var selectedCd = selectedId.HasValue ? Model.FirstOrDefault(c => c.Id == selectedId.Value) : null;
 }
 
 <h2>CD Listesi</h2>
+
+@if (selectedCd != null)
+{
+    <div class="alert alert-info selected-cd-alert" role="status">
+        Seçilen CD: <strong>@selectedCd.Ad</strong>
+    </div>
+}
 
 @if (TempData["Error"] != null)
 {
@@ -26,9 +36,14 @@
     @foreach (var cd in Model)
     {
         var cartQuantity = cartItems.FirstOrDefault(c => c.CdId == cd.Id)?.Quantity ?? 0;
-        <div class="col-md-4 mb-3">
-            <div class="card">
+        var isSelected = selectedId == cd.Id;
+        <div class="col-md-4 mb-3" id="cd-@cd.Id">
+            <div class="card cd-card @(isSelected ? "selected-cd-card" : "")">
                 <div class="card-body">
+                    @if (isSelected)
+                    {
+                        <span class="selected-cd-badge">Seçili CD</span>
+                    }
                     <div class="cd-cover-wrap mb-3">
                         <img src="img/@cd.Foto" alt="" class="img-fluid cd-cover">
                     </div>

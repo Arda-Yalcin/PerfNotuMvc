@@ -6,7 +6,12 @@
 
 <h2>Kullanıcılar</h2>
 
-<table class="table table-striped">
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<table class="table table-striped align-middle">
     <thead>
         <tr>
             <th>Ad</th>
@@ -14,6 +19,7 @@
             <th>Email</th>
             <th>Telefon</th>
             <th>Adres</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +31,9 @@
                 <td>@user.Email</td>
                 <td>@user.Telefon</td>
                 <td>@user.Adres</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-outline-primary btn-sm">Düzenle</a>
+                </td>
             </tr>
         }
     </tbody>
