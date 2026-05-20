@@ -21,12 +21,14 @@ namespace MuzikSitesi.Controllers
 
         private string? GetCurrentUserId()
         {
+            // Oturumdaki kullanicinin Identity id degeri.
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         public IActionResult Index()
         {
             var userId = GetCurrentUserId();
+            // Sepet yalnizca aktif kullaniciya ait kayitlari gosterir.
             var cartItems = _context.SepetKalemleri
                 .Include(c => c.Cd)
                 .Where(c => c.AppUserId == userId)
@@ -55,6 +57,7 @@ namespace MuzikSitesi.Controllers
                 .FirstOrDefault(c => c.AppUserId == userId && c.CdId == cdId);
             var currentQuantity = existingItem?.Quantity ?? 0;
 
+            // Sepetteki miktar stoktan fazla olamaz.
             if (cd.Stock <= currentQuantity)
             {
                 TempData["Error"] = "Bu CD için yeterli stok yok.";
@@ -95,6 +98,7 @@ namespace MuzikSitesi.Controllers
 
             if (quantity < 1)
             {
+                // Miktar sifira dusurse kalem sepetten kaldirilir.
                 _context.SepetKalemleri.Remove(cartItem);
             }
             else
@@ -136,6 +140,7 @@ namespace MuzikSitesi.Controllers
 
             foreach (var item in cartItems)
             {
+                // Kiralama talebi olusturmadan once tum stoklar kontrol edilir.
                 var stock = item.Cd?.Stock ?? 0;
                 if (item.Quantity > stock)
                 {
@@ -147,6 +152,7 @@ namespace MuzikSitesi.Controllers
 
             foreach (var item in cartItems)
             {
+                // Sepetteki her CD icin admin onayi bekleyen kiralama kaydi acilir.
                 _context.CdKiralamalari.Add(new CdRental
                 {
                     AppUserId = userId,

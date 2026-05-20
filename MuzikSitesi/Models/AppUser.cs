@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MuzikSitesi.Models
 {
+    // Identity kullanicisina uygulamaya ozel profil alanlari ekler.
     public class AppUser:IdentityUser
     {
         public string Ad { get; set; }

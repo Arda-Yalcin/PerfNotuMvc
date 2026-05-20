@@ -19,8 +19,8 @@
             .Count(r => r.AppUserId == userId
                 && r.IsApproved
                 && !r.IsReturned
-                && r.ApprovalDate.HasValue
-                && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow);
+                && ((r.DueDate.HasValue && r.DueDate.Value < DateTime.UtcNow)
+                    || (!r.DueDate.HasValue && r.ApprovalDate.HasValue && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow)));
     }
 }
 <!DOCTYPE html>

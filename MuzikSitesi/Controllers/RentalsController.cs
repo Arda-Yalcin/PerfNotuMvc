@@ -21,6 +21,7 @@ namespace MuzikSitesi.Controllers
         public IActionResult Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Admin tum kiralamalari, uye sadece kendi kiralamalarini gorur.
             var query = _context.CdKiralamalari
                 .Include(r => r.AppUser)
                 .Include(r => r.Cd)
@@ -55,6 +56,7 @@ namespace MuzikSitesi.Controllers
 
             if (rental.IsApproved && !rental.IsReturned && !rental.ReturnRequested)
             {
+                // Uye iade talebi acabilir; stok admin onayinda guncellenir.
                 rental.ReturnRequested = true;
                 rental.ReturnRequestDate = DateTime.UtcNow;
                 _context.SaveChanges();
@@ -80,6 +82,7 @@ namespace MuzikSitesi.Controllers
 
             if (!rental.IsApproved)
             {
+                // Kiralama onaylanirken stok dusurulur.
                 if (rental.Cd == null || rental.Cd.Stock < rental.Quantity)
                 {
                     TempData["Error"] = "Bu kiralama için yeterli CD stoğu yok.";
@@ -89,9 +92,35 @@ namespace MuzikSitesi.Controllers
                 rental.Cd.Stock -= rental.Quantity;
                 rental.IsApproved = true;
                 rental.ApprovalDate = DateTime.UtcNow;
+                rental.DueDate = rental.ApprovalDate.Value.AddDays(15);
                 _context.SaveChanges();
                 TempData["Success"] = "Kiralama onaylandı.";
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult UpdateDueDate(int id, DateTime dueDate)
+        {
+            var rental = _context.CdKiralamalari.FirstOrDefault(r => r.Id == id);
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            if (!rental.IsApproved || rental.IsReturned)
+            {
+                TempData["Error"] = "Sadece aktif kiralamaların son teslim tarihi değiştirilebilir.";
+                return RedirectToAction("Index");
+            }
+
+            // Tarayicidan gelen tarih yerel saat kabul edilip veritabaninda UTC saklanir.
+            rental.DueDate = DateTime.SpecifyKind(dueDate, DateTimeKind.Local).ToUniversalTime();
+            _context.SaveChanges();
+            TempData["Success"] = "Son teslim tarihi güncellendi.";
 
             return RedirectToAction("Index");
         }
@@ -130,6 +159,7 @@ namespace MuzikSitesi.Controllers
                     rental.Cd.Stock += rental.Quantity;
                 }
 
+                // Direkt iade ve onayli iade ayni stok guncelleme akisini kullanir.
                 rental.IsReturned = true;
                 rental.ReturnDate = DateTime.UtcNow;
                 rental.ReturnRequested = true;

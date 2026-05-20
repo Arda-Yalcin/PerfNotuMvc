@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MuzikSitesi.Models.ViewModels
 {
+    // Giris formundan gelen kimlik bilgileri.
     public class LoginViewModel
     {
         [Required(ErrorMessage ="EPosta Gereklidir")]

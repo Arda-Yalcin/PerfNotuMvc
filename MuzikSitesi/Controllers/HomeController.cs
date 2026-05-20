@@ -18,6 +18,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        // Ana sayfada CD kartlari grup bilgisiyle birlikte gosterilir.
         var model = new HomeIndexViewModel
         {
             Cdler = _context.Cdler.Include(c => c.Grup).ToList()
@@ -33,6 +34,7 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
+        // Hata ekraninda takip edilebilecek istek numarasi gosterilir.
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

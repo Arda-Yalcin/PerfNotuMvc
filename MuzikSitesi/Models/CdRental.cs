@@ -2,6 +2,7 @@ using System;
 
 namespace MuzikSitesi.Models
 {
+    // CD kiralama, onay ve iade durumlarini saklar.
     public class CdRental
     {
         public int Id { get; set; }
@@ -20,6 +21,7 @@ namespace MuzikSitesi.Models
         public DateTime? ReturnDate { get; set; }
         public bool IsReturned { get; set; }
 
-        public DateTime DueDate => RentDate.AddDays(15);
+        // Admin tarafindan degistirilebilen son teslim tarihi.
+        public DateTime? DueDate { get; set; }
     }
 }

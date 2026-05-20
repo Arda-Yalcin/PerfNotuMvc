@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MuzikSitesi.Models.ViewModels
 {
+    // Yeni kullanici kayit formunun alanlari.
     public class RegisterViewModel
     {
         [Required]

@@ -4,8 +4,8 @@
     var isAdmin = User?.IsInRole("Admin") == true;
     var overdueCount = Model.Count(r => r.IsApproved
         && !r.IsReturned
-        && r.ApprovalDate.HasValue
-        && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow);
+        && ((r.DueDate.HasValue && r.DueDate.Value < DateTime.UtcNow)
+            || (!r.DueDate.HasValue && r.ApprovalDate.HasValue && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow)));
 }
 
 <h2>@(isAdmin ? "Kiralama Talepleri" : "Kiralamalarım")</h2>
@@ -57,7 +57,7 @@ else
         <tbody>
             @foreach (var rental in Model)
             {
-                var dueDateUtc = rental.ApprovalDate?.AddDays(15);
+                var dueDateUtc = rental.DueDate ?? rental.ApprovalDate?.AddDays(15);
                 var dueDate = dueDateUtc?.ToLocalTime();
                 var overdue = rental.IsApproved && !rental.IsReturned && dueDateUtc.HasValue && dueDateUtc.Value < DateTime.UtcNow;
                 <tr class="@(overdue ? "table-danger overdue-rental-row" : "")">
@@ -104,6 +104,12 @@ else
                         }
                         else if (isAdmin && rental.IsApproved && !rental.IsReturned)
                         {
+                            <form asp-action="UpdateDueDate" asp-controller="Rentals" method="post" class="d-inline-flex align-items-center gap-1 mb-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@rental.Id" />
+                                <input type="datetime-local" name="dueDate" value="@(dueDate?.ToString("yyyy-MM-ddTHH:mm"))" class="form-control form-control-sm rental-due-date-input" />
+                                <button type="submit" class="btn btn-outline-primary btn-sm">Son Tarihi Güncelle</button>
+                            </form>
                             <form asp-action="@(rental.ReturnRequested ? "ApproveReturn" : "DirectReturn")" asp-controller="Rentals" method="post" class="d-inline">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@rental.Id" />

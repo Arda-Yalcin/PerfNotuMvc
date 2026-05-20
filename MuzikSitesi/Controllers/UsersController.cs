@@ -21,12 +21,14 @@ namespace MuzikSitesi.Controllers
 
         public IActionResult Index()
         {
+            // Admin tum kullanicilari listeler.
             var users = _userManager.Users.ToList();
             return View(users);
         }
 
         public async Task<IActionResult> Edit(string id)
         {
+            // Duzenleme formu secilen kullanicinin mevcut bilgileriyle acilir.
             if (string.IsNullOrWhiteSpace(id))
             {
                 return NotFound();
@@ -43,7 +45,7 @@ namespace MuzikSitesi.Controllers
                 Id = user.Id,
                 Ad = user.Ad,
                 Soyad = user.Soyad,
-                Email = user.Email ?? string.Empty,
+                Email = user.Email,
                 Telefon = user.Telefon,
                 Adres = user.Adres
             });
@@ -53,28 +55,31 @@ namespace MuzikSitesi.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(UserEditViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
                 return NotFound();
             }
 
+            // E-posta admin tarafindan degistirilemez; form sadece mevcut degeri gosterir.
+            model.Email = user.Email;
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             user.Ad = model.Ad;
             user.Soyad = model.Soyad;
-            user.Email = model.Email;
-            user.UserName = model.Email;
             user.Telefon = model.Telefon;
             user.PhoneNumber = model.Telefon;
             user.Adres = model.Adres;
 
+            // Identity kullanici kaydi guncellenir.
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
+                // Navbar'da gorunen ad soyad claim bilgisini guncel tut.
                 var claims = await _userManager.GetClaimsAsync(user);
                 var fullNameClaims = claims.Where(c => c.Type == "TamAd").ToList();
                 foreach (var claim in fullNameClaims)

@@ -17,6 +17,7 @@ namespace MuzikSitesi.Controllers
 
         public IActionResult Index()
         {
+            // Tum muzik gruplari listeye tasinir.
             var gruplar = _context.Gruplar.ToList();
             return View(gruplar);
         }
@@ -33,6 +34,7 @@ namespace MuzikSitesi.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Admin yeni grup kaydini olusturur.
                 _context.Gruplar.Add(grup);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -45,6 +47,7 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
+            // Duzenlenecek grup yoksa 404 doner.
             if (id == null) return NotFound();
             var grup = _context.Gruplar.FirstOrDefault(g => g.Id == id);
             if (grup == null) return NotFound();
@@ -57,6 +60,7 @@ namespace MuzikSitesi.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Formdan gelen grup bilgileri veritabanina yazilir.
                 _context.Gruplar.Update(grup);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -69,6 +73,7 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Sil(int? id)
         {
+            // Silme onay sayfasi icin mevcut grup getirilir.
             if (id == null) return NotFound();
             var grup = _context.Gruplar.FirstOrDefault(m => m.Id == id);
             if (grup == null) return NotFound();
@@ -84,6 +89,7 @@ namespace MuzikSitesi.Controllers
 
             if (grup != null)
             {
+                // Onaylanan grup silme islemi.
                 _context.Gruplar.Remove(grup);
                 _context.SaveChanges();
             }

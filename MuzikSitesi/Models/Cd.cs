@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace MuzikSitesi.Models
 {
+    // Kiralanabilir CD ve stok bilgisini tutar.
     public class Cd
     {
         public int Id { get; set; }

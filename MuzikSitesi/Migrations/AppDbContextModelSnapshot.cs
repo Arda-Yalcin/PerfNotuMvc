@@ -291,6 +291,9 @@ namespace MuzikSitesi.Migrations
                     b.Property<int>("CdId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsApproved")
                         .HasColumnType("INTEGER");
 

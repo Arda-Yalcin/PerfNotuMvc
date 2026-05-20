@@ -90,6 +90,10 @@ body {
   border-bottom: 2px solid rgba(220, 38, 38, 0.35);
 }
 
+.rental-due-date-input {
+  width: 11.5rem;
+}
+
 .card {
   border: none;
   border-radius: 1.1rem;

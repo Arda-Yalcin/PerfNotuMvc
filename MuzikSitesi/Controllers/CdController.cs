@@ -21,6 +21,7 @@ namespace MuzikSitesi.Controllers
 
         public IActionResult Index()
         {
+            // CD listesi grup adlariyla birlikte yuklenir.
             var cdler = _context.Cdler.Include(c => c.Grup).ToList();
             return View(cdler);
         }
@@ -28,6 +29,7 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Ekle()
         {
+            // CD ekleme formunda grup secimi icin liste hazirlanir.
             ViewBag.GrupListesi = new SelectList(_context.Gruplar, "Id", "Ad");
             return View();
         }
@@ -40,6 +42,7 @@ namespace MuzikSitesi.Controllers
             {
                 if (Foto != null)
                 {
+                    // Yuklenen kapak fotografi benzersiz isimle wwwroot/img altina kaydedilir.
                     var uzanti = Path.GetExtension(Foto.FileName);
                     var yendiAd = Guid.NewGuid() + "." + uzanti;
                     var yol = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", yendiAd);
@@ -80,6 +83,7 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Sil(int? id)
         {
+            // Silme onayinda CD ve grup bilgisi birlikte gosterilir.
             if (id == null) return NotFound();
 
             var cd = _context.Cdler.Include(c => c.Grup).FirstOrDefault(m => m.Id == id);
@@ -95,6 +99,7 @@ namespace MuzikSitesi.Controllers
             var cd = _context.Cdler.Find(id);
             if (cd != null)
             {
+                // Admin onayindan sonra CD kaydi silinir.
                 _context.Cdler.Remove(cd);
                 _context.SaveChanges();
             }
@@ -104,6 +109,7 @@ namespace MuzikSitesi.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
+            // Duzenleme formu mevcut CD bilgileriyle acilir.
             var cd = _context.Cdler.FirstOrDefault(x => x.Id == id);
             if (cd != null)
             {
@@ -122,12 +128,14 @@ namespace MuzikSitesi.Controllers
                 var existingCd = _context.Cdler.FirstOrDefault(x => x.Id == cd.Id);
                 if (existingCd != null)
                 {
+                    // Mevcut CD kaydi formdaki yeni degerlerle guncellenir.
                     existingCd.Ad = cd.Ad;
                     existingCd.GrupId = cd.GrupId;
                     existingCd.Stock = cd.Stock;
 
                     if (Foto != null)
                     {
+                        // Yeni fotograf yuklendiyse eski dosya yolu yerine yeni ad saklanir.
                         var uzanti = Path.GetExtension(Foto.FileName);
                         var yendiAd = Guid.NewGuid() + "." + uzanti;
                         var yol = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", yendiAd);

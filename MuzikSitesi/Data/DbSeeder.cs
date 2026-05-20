@@ -1,29 +1,30 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using MuzikSitesi.Models;
 using Microsoft.AspNetCore.Identity;
+using MuzikSitesi.Models;
 
 namespace MuzikSitesi.Data
 {
     public static class DbSeeder
     {
+        // Ilk kurulumda roller ve varsayilan admin hesabi olusturulur.
         public static async Task RoleEkle(IServiceProvider serviceProvider)
         {
-            var roleManager=serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager=serviceProvider.GetRequiredService<UserManager<AppUser>>();
-            //Rolleri oluşturma.
-            string[] roller={"Admin","Member"};
-            foreach(var rol in roller)
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+
+            // Gerekli roller yoksa eklenir.
+            string[] roller = { "Admin", "Member" };
+            foreach (var rol in roller)
             {
-                if(!await roleManager.RoleExistsAsync(rol))
+                if (!await roleManager.RoleExistsAsync(rol))
                 {
                     await roleManager.CreateAsync(new IdentityRole(rol));
                 }
             }
-            // varsayılan kullanıcı oluştuır
+
+            // Sisteme giris icin varsayilan admin kullanici.
             var adminMail = "admin@proje.com";
             var adminUser = await userManager.FindByEmailAsync(adminMail);
             if (adminUser == null)
@@ -34,8 +35,8 @@ namespace MuzikSitesi.Data
                     Email = adminMail,
                     Ad = "Arda",
                     Soyad = "Yonetici",
-                    Adres="İzmir",
-                    Telefon="0555 555 55 55",
+                    Adres = "Izmir",
+                    Telefon = "0555 555 55 55",
                     EmailConfirmed = true
                 };
 
@@ -43,8 +44,8 @@ namespace MuzikSitesi.Data
                 if (createAdmin.Succeeded)
                 {
                     await userManager.AddClaimAsync(newAdmin, new Claim("TamAd", newAdmin.Ad + " " + newAdmin.Soyad));
-                    await userManager.AddToRoleAsync(newAdmin,"Admin");
-                    Console.WriteLine("Kullanıcı Eklendi");
+                    await userManager.AddToRoleAsync(newAdmin, "Admin");
+                    Console.WriteLine("Kullanici Eklendi");
                 }
             }
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace MuzikSitesi.Models
 {
+    // Kullanici sepetindeki tek bir CD kalemini temsil eder.
     public class CartItem
     {
         public int Id { get; set; }

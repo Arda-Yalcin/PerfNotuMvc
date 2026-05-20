@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace MuzikSitesi.Models
 {
+    // Muzik grubu ve ona bagli CD listesini temsil eder.
     public class Grup
     {
         public int Id { get; set; }
