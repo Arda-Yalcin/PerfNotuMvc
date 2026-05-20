@@ -29,7 +29,9 @@
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-body">
-                    <img src="img/@cd.Foto" alt="" class="img-fluid mb-3">
+                    <div class="cd-cover-wrap mb-3">
+                        <img src="img/@cd.Foto" alt="" class="img-fluid cd-cover">
+                    </div>
                     <h4 class="card-title" style="margin-bottom: 20px;"><strong>CD:</strong> @cd.Ad</h4>
                     <p class="card-text" style="margin-bottom: 20px;"><strong>Grup:</strong> @cd.Grup?.Ad</p>
                     <p class="card-text"><strong>Stok:</strong> @cd.Stock adet</p>
@@ -42,20 +44,9 @@
                         <input type="hidden" name="cdId" value="@cd.Id" />
                         <button type="submit" class="btn btn-success">Sepete Ekle</button>
                     </form>
-                    @if (User?.Identity?.IsAuthenticated == true)
+                    @if (cd.Stock <= 0)
                     {
-                        @if (cd.Stock > 0)
-                        {
-                            <form asp-action="Rent" method="post" class="d-inline me-1">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="id" value="@cd.Id" />
-                                <button type="submit" class="btn btn-warning">Kirala</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <span class="text-danger">Stokta Yok</span>
-                        }
+                        <span class="text-danger">Stokta Yok</span>
                     }
                     @if (User?.IsInRole("Admin") == true)
                     {
@@ -64,7 +55,7 @@
                     }
                     else if (User?.Identity?.IsAuthenticated != true)
                     {
-                        <p class="text-muted">Giriş yaparak sepete ekleyebilir veya CD kiralayabilirsiniz.</p>
+                        <p class="text-muted">Giriş yaparak sepete ekleyebilirsiniz.</p>
                     }
                 </div>
             </div>

@@ -3,10 +3,9 @@
 <div class="py-5 text-center hero-card rounded-4 mb-4">
     <div class="container py-5">
         <h1 class="display-5 fw-bold">MuzikSitesi'ne Hoşgeldiniz</h1>
-        <p class="fs-5 text-muted">Albüm satın alın, CD kiralayın ve favori gruplarınızın dünyasını keşfedin. Müzik koleksiyonunuz için en iyi seçenekleri burada bulabilirsiniz.</p>
+        <p class="fs-5 text-muted">CD koleksiyonunu keşfedin, favori gruplarınızın çalışmalarına göz atın ve kiralama taleplerinizi sepet üzerinden yönetin.</p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a asp-controller="Album" asp-action="Index" class="btn btn-primary btn-lg px-4">Albüm Kataloğu</a>
-            <a asp-controller="Cd" asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">CD Kataloğu</a>
+            <a asp-controller="Cd" asp-action="Index" class="btn btn-primary btn-lg px-4">CD Kataloğu</a>
         </div>
     </div>
 </div>
@@ -16,12 +15,12 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h2 class="card-title">Site İçeriği</h2>
-                <p class="card-text">Bu site, müzikseverlere albüm ve CD koleksiyonlarını yönetme imkanı sağlıyor. Albümleri satın almak için "Albüm" bölümüne, CD kiralamak için "CD" bölümüne gidebilirsiniz. Gruptan gruba göz atarak yeni favoriler keşfedin.</p>
+                <p class="card-text">Bu site CD kiralama sürecini yönetir. CD'leri sepete ekleyebilir, kiralama talebi gönderebilir ve iade taleplerinizi yönetici onayına iletebilirsiniz.</p>
                 <ul>
-                    <li>Albüm listesi ve detayları</li>
-                    <li>CD kiralama seçeneği</li>
-                    <li>Grup bazlı müzik keşfi</li>
-                    <li>Kullanıcı sepeti ve kiralamalar</li>
+                    <li>CD listesi ve detayları</li>
+                    <li>Grup bazlı CD keşfi</li>
+                    <li>Yönetici onaylı kiralama ve iade işlemleri</li>
+                    <li>Kullanıcı sepeti ve kiralama geçmişi</li>
                 </ul>
             </div>
         </div>
@@ -31,29 +30,11 @@
             <div class="card-body">
                 <h3 class="card-title">Hızlı Bağlantılar</h3>
                 <p class="card-text">Sitede istediğiniz yere kolayca erişebilirsiniz.</p>
-                <a asp-controller="Album" asp-action="Index" class="btn btn-light btn-sm mb-2">Albüm Listesi</a>
                 <a asp-controller="Cd" asp-action="Index" class="btn btn-light btn-sm mb-2">CD Listesi</a>
                 <a asp-controller="Grup" asp-action="Index" class="btn btn-light btn-sm mb-2">Gruplar</a>
             </div>
         </div>
     </div>
-</div>
-
-<h3>Öne Çıkan Albümler</h3>
-<div class="row">
-    @foreach (var album in Model.Albumler.Take(4))
-    {
-        <div class="col-md-3 mb-3">
-            <div class="card h-100">
-                <img src="img/@album.Foto" class="card-img-top" alt="@album.Ad" />
-                <div class="card-body">
-                    <h5 class="card-title">@album.Ad</h5>
-                    <p class="card-text"><strong>Grup:</strong> @album.Grup?.Ad</p>
-                    <a asp-controller="Album" asp-action="Index" class="btn btn-sm btn-outline-primary">Albüm Gör</a>
-                </div>
-            </div>
-        </div>
-    }
 </div>
 
 <h3 class="mt-4">CD Koleksiyonu</h3>
@@ -67,8 +48,7 @@
                     <h5 class="card-title">@cd.Ad</h5>
                     <p class="card-text"><strong>Grup:</strong> @cd.Grup?.Ad</p>
                     <div class="d-grid gap-2">
-                        <a asp-controller="Cd" asp-action="Index" class="btn btn-sm btn-outline-secondary">Tüm CD'ler</a>
-                       
+                        <a asp-controller="Cd" asp-action="Index" asp-route-selectedId="@cd.Id" class="btn btn-sm btn-outline-secondary">CD'ye Git: @cd.Ad</a>
                     </div>
                 </div>
             </div>

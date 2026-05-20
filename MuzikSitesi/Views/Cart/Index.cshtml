@@ -2,10 +2,15 @@
 
 <h2>Sepetim</h2>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        Sepetinizde ürün bulunmuyor. Albüm veya CD eklemek için <a asp-controller="Album" asp-action="Index">albüm listesine</a> ya da <a asp-controller="Cd" asp-action="Index">CD listesine</a> gidin.
+        Sepetinizde CD bulunmuyor. CD eklemek için <a asp-controller="Cd" asp-action="Index">CD listesine</a> gidin.
     </div>
 }
 else
@@ -13,7 +18,8 @@ else
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Ürün</th>
+                <th>CD</th>
+                <th>Stok</th>
                 <th>Adet</th>
                 <th></th>
             </tr>
@@ -21,13 +27,15 @@ else
         <tbody>
             @foreach (var item in Model)
             {
+                var stock = item.Cd?.Stock ?? 0;
                 <tr>
-                    <td>@(item.Album?.Ad ?? item.Cd?.Ad)</td>
+                    <td>@item.Cd?.Ad</td>
+                    <td>@stock</td>
                     <td style="width: 200px;">
                         <form asp-action="UpdateQuantity" asp-controller="Cart" method="post" class="d-flex align-items-center gap-2">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@item.Id" />
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="max-width: 100px;" />
+                            <input type="number" name="quantity" value="@item.Quantity" min="1" max="@stock" class="form-control" style="max-width: 100px;" />
                             <button type="submit" class="btn btn-primary">Güncelle</button>
                         </form>
                     </td>
@@ -42,4 +50,9 @@ else
             }
         </tbody>
     </table>
+
+    <form asp-action="RentCart" asp-controller="Cart" method="post" class="text-end">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-warning">Kiralama Talebi Gönder</button>
+    </form>
 }

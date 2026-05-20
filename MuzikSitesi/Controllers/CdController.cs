@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,46 +23,6 @@ namespace MuzikSitesi.Controllers
         {
             var cdler = _context.Cdler.Include(c => c.Grup).ToList();
             return View(cdler);
-        }
-
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Rent(int id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var cd = _context.Cdler.Find(id);
-            if (cd == null)
-            {
-                return NotFound();
-            }
-
-            if (cd.Stock <= 0)
-            {
-                TempData["Error"] = "Bu CD stokta yok, kiralanamaz.";
-                return RedirectToAction("Index");
-            }
-
-            var existingRental = _context.CdKiralamalari.FirstOrDefault(r => r.AppUserId == userId && r.CdId == id && !r.IsReturned);
-            if (existingRental == null)
-            {
-                _context.CdKiralamalari.Add(new CdRental
-                {
-                    AppUserId = userId,
-                    CdId = id,
-                    RentDate = DateTime.UtcNow,
-                    IsReturned = false
-                });
-                cd.Stock--; // Stock azalt
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Admin")]

@@ -12,7 +12,6 @@ namespace MuzikSitesi.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Grup> Gruplar { get; set; }
-        public DbSet<Album> Albumler { get; set; }
         public DbSet<Cd> Cdler { get; set; }
         public DbSet<CartItem> SepetKalemleri { get; set; }
         public DbSet<CdRental> CdKiralamalari { get; set; }

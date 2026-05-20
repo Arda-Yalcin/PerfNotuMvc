@@ -1,41 +1,76 @@
 @model List<MuzikSitesi.Models.CdRental>
 
-<h2>Kiralamalarım</h2>
+@{
+    var isAdmin = User?.IsInRole("Admin") == true;
+}
+
+<h2>@(isAdmin ? "Kiralama Talepleri" : "Kiralamalarım")</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
 
 <div class="alert alert-warning">
-    Kiralama süresi sabittir: <strong>15 gün</strong>. Aşağıda en geç teslim tarihi gösterilmektedir.
+    Kiralama ve iade işlemleri yönetici onayından sonra tamamlanır. Kiralama süresi onaydan itibaren <strong>15 gün</strong> kabul edilir.
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">Henüz kiralanmış CD'niz yok.</div>
+    <div class="alert alert-info">Henüz kiralama kaydı yok.</div>
 }
 else
 {
     <table class="table table-striped align-middle">
         <thead>
             <tr>
+                @if (isAdmin)
+                {
+                    <th>Üye</th>
+                }
                 <th>CD</th>
                 <th>Grup</th>
-                <th>Kiralanma Tarihi</th>
+                <th>Adet</th>
+                <th>Talep Tarihi</th>
+                <th>Onay Tarihi</th>
                 <th>Son Teslim Tarihi</th>
                 <th>Durum</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var rental in Model)
             {
-                var dueDate = rental.DueDate.ToLocalTime();
-                var overdue = !rental.IsReturned && dueDate < DateTime.Now;
+                var dueDate = rental.ApprovalDate?.AddDays(15).ToLocalTime();
+                var overdue = rental.IsApproved && !rental.IsReturned && dueDate != null && dueDate < DateTime.Now;
                 <tr class="@(overdue ? "table-danger" : "")">
+                    @if (isAdmin)
+                    {
+                        <td>@(rental.AppUser?.Ad + " " + rental.AppUser?.Soyad)</td>
+                    }
                     <td>@rental.Cd?.Ad</td>
                     <td>@rental.Cd?.Grup?.Ad</td>
+                    <td>@rental.Quantity</td>
                     <td>@rental.RentDate.ToLocalTime().ToString("g")</td>
-                    <td>@dueDate.ToString("g")</td>
+                    <td>@(rental.ApprovalDate?.ToLocalTime().ToString("g") ?? "-")</td>
+                    <td>@(dueDate?.ToString("g") ?? "-")</td>
                     <td>
                         @if (rental.IsReturned)
                         {
                             <span class="badge bg-success">İade Edildi</span>
+                        }
+                        else if (rental.ReturnRequested)
+                        {
+                            <span class="badge bg-warning text-dark">İade Onayı Bekliyor</span>
+                        }
+                        else if (!rental.IsApproved)
+                        {
+                            <span class="badge bg-secondary">Kiralama Onayı Bekliyor</span>
                         }
                         else if (overdue)
                         {
@@ -44,6 +79,32 @@ else
                         else
                         {
                             <span class="badge bg-primary">Kirada</span>
+                        }
+                    </td>
+                    <td>
+                        @if (isAdmin && !rental.IsApproved)
+                        {
+                            <form asp-action="ApproveRental" asp-controller="Rentals" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@rental.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">Kiralamayı Onayla</button>
+                            </form>
+                        }
+                        else if (isAdmin && rental.ReturnRequested && !rental.IsReturned)
+                        {
+                            <form asp-action="ApproveReturn" asp-controller="Rentals" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@rental.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">İadeyi Onayla</button>
+                            </form>
+                        }
+                        else if (!isAdmin && rental.IsApproved && !rental.ReturnRequested && !rental.IsReturned)
+                        {
+                            <form asp-action="Return" asp-controller="Rentals" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@rental.Id" />
+                                <button type="submit" class="btn btn-outline-success btn-sm">İade Talebi Gönder</button>
+                            </form>
                         }
                     </td>
                 </tr>

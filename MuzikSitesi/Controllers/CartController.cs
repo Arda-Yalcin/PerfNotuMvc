@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,7 @@ namespace MuzikSitesi.Controllers
             _context = context;
         }
 
-        private string GetCurrentUserId()
+        private string? GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
@@ -27,7 +28,6 @@ namespace MuzikSitesi.Controllers
         {
             var userId = GetCurrentUserId();
             var cartItems = _context.SepetKalemleri
-                .Include(c => c.Album)
                 .Include(c => c.Cd)
                 .Where(c => c.AppUserId == userId)
                 .ToList();
@@ -37,46 +37,31 @@ namespace MuzikSitesi.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCart(int? albumId, int? cdId)
+        public IActionResult AddToCart(int? cdId)
         {
             var userId = GetCurrentUserId();
-            if (albumId == null && cdId == null)
+            if (userId == null || cdId == null)
             {
                 return BadRequest();
             }
 
-            if (albumId != null && cdId != null)
+            var cd = _context.Cdler.Find(cdId.Value);
+            if (cd == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            if (albumId != null)
-            {
-                var existingItem = _context.SepetKalemleri
-                    .FirstOrDefault(c => c.AppUserId == userId && c.AlbumId == albumId);
-
-                if (existingItem == null)
-                {
-                    _context.SepetKalemleri.Add(new CartItem
-                    {
-                        AppUserId = userId,
-                        AlbumId = albumId,
-                        Quantity = 1
-                    });
-                }
-                else
-                {
-                    existingItem.Quantity++;
-                }
-
-                _context.SaveChanges();
-                return RedirectToAction("Index", "Cart");
-            }
-
-            var existingCdItem = _context.SepetKalemleri
+            var existingItem = _context.SepetKalemleri
                 .FirstOrDefault(c => c.AppUserId == userId && c.CdId == cdId);
+            var currentQuantity = existingItem?.Quantity ?? 0;
 
-            if (existingCdItem == null)
+            if (cd.Stock <= currentQuantity)
+            {
+                TempData["Error"] = "Bu CD için yeterli stok yok.";
+                return RedirectToAction("Index", "Cd");
+            }
+
+            if (existingItem == null)
             {
                 _context.SepetKalemleri.Add(new CartItem
                 {
@@ -87,7 +72,7 @@ namespace MuzikSitesi.Controllers
             }
             else
             {
-                existingCdItem.Quantity++;
+                existingItem.Quantity++;
             }
 
             _context.SaveChanges();
@@ -100,7 +85,7 @@ namespace MuzikSitesi.Controllers
         {
             var userId = GetCurrentUserId();
             var cartItem = _context.SepetKalemleri
-                .Include(c => c.Album)
+                .Include(c => c.Cd)
                 .FirstOrDefault(c => c.Id == id && c.AppUserId == userId);
 
             if (cartItem == null)
@@ -114,11 +99,71 @@ namespace MuzikSitesi.Controllers
             }
             else
             {
+                var stock = cartItem.Cd?.Stock ?? 0;
+                if (quantity > stock)
+                {
+                    TempData["Error"] = "Seçilen miktar stoktan fazla olamaz.";
+                    return RedirectToAction("Index");
+                }
+
                 cartItem.Quantity = quantity;
             }
 
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RentCart()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return BadRequest();
+            }
+
+            var cartItems = _context.SepetKalemleri
+                .Include(c => c.Cd)
+                .Where(c => c.AppUserId == userId)
+                .ToList();
+
+            if (!cartItems.Any())
+            {
+                TempData["Error"] = "Sepetinizde kiralanacak CD yok.";
+                return RedirectToAction("Index");
+            }
+
+            foreach (var item in cartItems)
+            {
+                var stock = item.Cd?.Stock ?? 0;
+                if (item.Quantity > stock)
+                {
+                    var productName = item.Cd?.Ad ?? "CD";
+                    TempData["Error"] = $"{productName} için yeterli stok yok.";
+                    return RedirectToAction("Index");
+                }
+            }
+
+            foreach (var item in cartItems)
+            {
+                _context.CdKiralamalari.Add(new CdRental
+                {
+                    AppUserId = userId,
+                    CdId = item.CdId!.Value,
+                    Quantity = item.Quantity,
+                    RentDate = DateTime.UtcNow,
+                    IsApproved = false,
+                    ReturnRequested = false,
+                    IsReturned = false
+                });
+            }
+
+            _context.SepetKalemleri.RemoveRange(cartItems);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Kiralama talebiniz yönetici onayına gönderildi.";
+            return RedirectToAction("Index", "Rentals");
         }
 
         [HttpPost]

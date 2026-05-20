@@ -11,6 +11,6 @@ namespace MuzikSitesi.Models
         public string? Ad { get; set; }
         public string? Kurucusu { get; set; }
         public string? Katilimcilar { get; set; }
-        public List<Album>? Albumler {get; set;}
+        public List<Cd>? Cdler { get; set; }
     }
 }

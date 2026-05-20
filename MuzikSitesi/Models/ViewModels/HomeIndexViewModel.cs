@@ -5,7 +5,6 @@ namespace MuzikSitesi.Models.ViewModels
 {
     public class HomeIndexViewModel
     {
-        public List<Album> Albumler { get; set; } = new();
         public List<Cd> Cdler { get; set; } = new();
     }
 }

@@ -17,7 +17,7 @@
     }
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,19 +33,16 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MuzikSitesi</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Menüyü aç">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Index">CD</a>
+                        </li>
                         @if (isSignedIn)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Album" asp-action="Index">Albüm</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Index">CD</a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Grup" asp-action="Index">Gruplar</a>
                             </li>
@@ -54,9 +51,6 @@
                             </li>
                             @if (User?.IsInRole("Admin") == true)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Album" asp-action="Ekle">Albüm Ekle</a>
-                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Ekle">CD Ekle</a>
                                 </li>
@@ -110,7 +104,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - MuzikSitesi - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            Arda Yalçın Proje Çalışması - 2024 &copy; Tüm hakları saklıdır.
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

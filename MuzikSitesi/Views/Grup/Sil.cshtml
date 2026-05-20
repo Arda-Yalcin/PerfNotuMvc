@@ -1,22 +1,20 @@
 @model MuzikSitesi.Models.Grup
 
 <h2 class="text-danger">Grubu Sil</h2>
-<h3><strong>"@Model.Ad"</strong> Grubunu silmek istediğinizden emin misiniz</h3>
+<h3><strong>"@Model.Ad"</strong> grubunu silmek istediğinizden emin misiniz?</h3>
 
-
-
-@if(TempData["HataMesaji"] != null){
+@if (TempData["HataMesaji"] != null)
+{
     <div class="alert alert-danger" style="font-weight: bold; margin-bottom:20px;">
         @TempData["HataMesaji"]
     </div>
 }
 
-<div style="border: 1px solid #ddd; padding:20px; border-radius:8px;" > 
-    <p class="alert alert-warning"><strong>Uyarı</strong> Silerseniz içerisindeki Albümlerde silinecek</p>
+<div style="border: 1px solid #ddd; padding:20px; border-radius:8px;">
     <form asp-action="Sil" method="post">
         <input type="hidden" asp-for="Id">
 
-        <button type="submit" class="btn btn-danger">Evet,Sil</button>
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
         <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
     </form>
 </div>

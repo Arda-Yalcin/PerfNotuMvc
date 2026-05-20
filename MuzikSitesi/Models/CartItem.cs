@@ -11,9 +11,6 @@ namespace MuzikSitesi.Models
         public string AppUserId { get; set; } = null!;
         public AppUser? AppUser { get; set; }
 
-        public int? AlbumId { get; set; }
-        public Album? Album { get; set; }
-
         public int? CdId { get; set; }
         public Cd? Cd { get; set; }
 

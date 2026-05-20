@@ -145,31 +145,6 @@ namespace MuzikSitesi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MuzikSitesi.Models.Album", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Ad")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Foto")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("GrupId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Stock")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GrupId");
-
-                    b.ToTable("Albumler");
-                });
-
             modelBuilder.Entity("MuzikSitesi.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -256,9 +231,6 @@ namespace MuzikSitesi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AlbumId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -270,8 +242,6 @@ namespace MuzikSitesi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlbumId");
 
                     b.HasIndex("AppUserId");
 
@@ -315,10 +285,19 @@ namespace MuzikSitesi.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CdId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsReturned")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("RentDate")
@@ -326,6 +305,12 @@ namespace MuzikSitesi.Migrations
 
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ReturnRequestDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ReturnRequested")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -407,23 +392,8 @@ namespace MuzikSitesi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MuzikSitesi.Models.Album", b =>
-                {
-                    b.HasOne("MuzikSitesi.Models.Grup", "Grup")
-                        .WithMany("Albumler")
-                        .HasForeignKey("GrupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Grup");
-                });
-
             modelBuilder.Entity("MuzikSitesi.Models.CartItem", b =>
                 {
-                    b.HasOne("MuzikSitesi.Models.Album", "Album")
-                        .WithMany()
-                        .HasForeignKey("AlbumId");
-
                     b.HasOne("MuzikSitesi.Models.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("AppUserId")
@@ -434,8 +404,6 @@ namespace MuzikSitesi.Migrations
                         .WithMany()
                         .HasForeignKey("CdId");
 
-                    b.Navigation("Album");
-
                     b.Navigation("AppUser");
 
                     b.Navigation("Cd");
@@ -444,7 +412,7 @@ namespace MuzikSitesi.Migrations
             modelBuilder.Entity("MuzikSitesi.Models.Cd", b =>
                 {
                     b.HasOne("MuzikSitesi.Models.Grup", "Grup")
-                        .WithMany()
+                        .WithMany("Cdler")
                         .HasForeignKey("GrupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -473,7 +441,7 @@ namespace MuzikSitesi.Migrations
 
             modelBuilder.Entity("MuzikSitesi.Models.Grup", b =>
                 {
-                    b.Navigation("Albumler");
+                    b.Navigation("Cdler");
                 });
 #pragma warning restore 612, 618
         }

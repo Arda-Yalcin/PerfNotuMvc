@@ -20,7 +20,6 @@ public class HomeController : Controller
     {
         var model = new HomeIndexViewModel
         {
-            Albumler = _context.Albumler.Include(a => a.Grup).ToList(),
             Cdler = _context.Cdler.Include(c => c.Grup).ToList()
         };
         return View(model);

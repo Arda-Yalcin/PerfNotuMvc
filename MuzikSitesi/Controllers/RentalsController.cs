@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -20,14 +21,109 @@ namespace MuzikSitesi.Controllers
         public IActionResult Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var rentals = _context.CdKiralamalari
+            var query = _context.CdKiralamalari
+                .Include(r => r.AppUser)
                 .Include(r => r.Cd)
                 .ThenInclude(c => c.Grup)
-                .Where(r => r.AppUserId == userId)
+                .AsQueryable();
+
+            if (User?.IsInRole("Admin") != true)
+            {
+                query = query.Where(r => r.AppUserId == userId);
+            }
+
+            var rentals = query
                 .OrderByDescending(r => r.RentDate)
                 .ToList();
 
             return View(rentals);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Return(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var rental = _context.CdKiralamalari
+                .Include(r => r.Cd)
+                .FirstOrDefault(r => r.Id == id && r.AppUserId == userId);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            if (rental.IsApproved && !rental.IsReturned && !rental.ReturnRequested)
+            {
+                rental.ReturnRequested = true;
+                rental.ReturnRequestDate = DateTime.UtcNow;
+                _context.SaveChanges();
+                TempData["Success"] = "İade talebiniz yönetici onayına gönderildi.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ApproveRental(int id)
+        {
+            var rental = _context.CdKiralamalari
+                .Include(r => r.Cd)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            if (!rental.IsApproved)
+            {
+                if (rental.Cd == null || rental.Cd.Stock < rental.Quantity)
+                {
+                    TempData["Error"] = "Bu kiralama için yeterli CD stoğu yok.";
+                    return RedirectToAction("Index");
+                }
+
+                rental.Cd.Stock -= rental.Quantity;
+                rental.IsApproved = true;
+                rental.ApprovalDate = DateTime.UtcNow;
+                _context.SaveChanges();
+                TempData["Success"] = "Kiralama onaylandı.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public IActionResult ApproveReturn(int id)
+        {
+            var rental = _context.CdKiralamalari
+                .Include(r => r.Cd)
+                .FirstOrDefault(r => r.Id == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            if (rental.IsApproved && rental.ReturnRequested && !rental.IsReturned)
+            {
+                if (rental.Cd != null)
+                {
+                    rental.Cd.Stock += rental.Quantity;
+                }
+
+                rental.IsReturned = true;
+                rental.ReturnDate = DateTime.UtcNow;
+                _context.SaveChanges();
+                TempData["Success"] = "İade onaylandı ve stok güncellendi.";
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }
