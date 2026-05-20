@@ -35,88 +35,119 @@
     <link rel="stylesheet" href="~/MuzikSitesi.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-secondary border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MuzikSitesi</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Menüyü aç">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Index">CD</a>
-                        </li>
-                        @if (isSignedIn)
-                        {
+    @if (!(isSignedIn && User?.IsInRole("Admin") == true))
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-secondary border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MuzikSitesi</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Menüyü aç">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Grup" asp-action="Index">Gruplar</a>
+                                <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Index">CD</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Rentals" asp-action="Index">Kiralamalarım</a>
-                            </li>
-                            @if (User?.IsInRole("Admin") == true)
+                            @if (isSignedIn)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Ekle">CD Ekle</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Grup" asp-action="Index">Gruplar</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Kullanıcılar</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Rentals" asp-action="Index">Kiralamalarım</a>
                                 </li>
                             }
-                        }
-                    </ul>
-                    <ul class="navbar-nav align-items-center">
-                        @if (isSignedIn)
-                        {
-                            <li class="nav-item me-3">
-                                <a class="nav-link cart-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
-                                    <span class="cart-icon" aria-hidden="true">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                                            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14.26l.84-2.34h7.77c.75 0 1.38-.52 1.5-1.25l1.24-6.27H5.21L4.27 2H1v2h2l3.6 7.59-1.35 3.24C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.49z" />
-                                        </svg>
-                                    </span>
-                                    @if (cartCount > 0)
-                                    {
-                                        <span class="cart-badge">@cartCount</span>
-                                    }
-                                </a>
-                            </li>
-                            <li class="nav-item me-3 text-white">
-                                @User.FindFirst("TamAd")?.Value
-                            </li>
-                            <li class="nav-item">
-                                <form asp-action="Logout" asp-controller="Account" method="post">
-                                    <button type="submit" class="btn btn-danger btn-sm">Çıkış</button>
+                        </ul>
+                        <ul class="navbar-nav align-items-center">
+                            @if (isSignedIn)
+                            {
+                                <li class="nav-item me-3">
+                                    <a class="nav-link cart-link position-relative" asp-area="" asp-controller="Cart" asp-action="Index">
+                                        <span class="cart-icon" aria-hidden="true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14.26l.84-2.34h7.77c.75 0 1.38-.52 1.5-1.25l1.24-6.27H5.21L4.27 2H1v2h2l3.6 7.59-1.35 3.24C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.49z" />
+                                            </svg>
+                                        </span>
+                                        @if (cartCount > 0)
+                                        {
+                                            <span class="cart-badge">@cartCount</span>
+                                        }
+                                    </a>
+                                </li>
+                                <li class="nav-item me-3 text-white">
+                                    @User.FindFirst("TamAd")?.Value
+                                </li>
+                                <li class="nav-item">
+                                    <form asp-action="Logout" asp-controller="Account" method="post">
+                                        <button type="submit" class="btn btn-danger btn-sm">Çıkış</button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-action="Login" asp-controller="Account">Giriş Yap</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+    @if (overdueRentalCount > 0)
+    {
+        <div class="overdue-site-warning" role="alert">
+            <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+                <strong>Gecikmiş iadeniz var!</strong>
+                <span>@overdueRentalCount adet CD'nin iade tarihi geçti. Lütfen en kısa sürede iade işlemi başlatın.</span>
+                <a asp-controller="Rentals" asp-action="Index" class="btn btn-light btn-sm">Kiralamalarımı Gör</a>
+            </div>
+        </div>
+    }
+    <div class="container-fluid admin-shell px-0">
+            @if (isSignedIn && User?.IsInRole("Admin") == true)
+            {
+                <aside class="admin-sidebar">
+                    <div class="admin-panel">
+                        <div class="admin-panel-header">
+                            <h5>Yönetici Paneli</h5>
+                            <p>@User.FindFirst("TamAd")?.Value</p>
+                        </div>
+                        <nav class="nav flex-column admin-menu">
+                            <div class="admin-menu-group">
+                                <h6>Genel</h6>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Panel Ana Sayfa</a>
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Siteyi Görüntüle</a>
+                            </div>
+                            <div class="admin-menu-group">
+                                <h6>İçerik Yönetimi</h6>
+                                <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Index">CD Yönetimi</a>
+                                <a class="nav-link" asp-area="" asp-controller="Cd" asp-action="Ekle">CD Ekle</a>
+                                <a class="nav-link" asp-area="" asp-controller="Grup" asp-action="Index">Gruplar</a>
+                            </div>
+                            <div class="admin-menu-group">
+                                <h6>Kullanıcı Yönetimi</h6>
+                                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Index">Kullanıcılar</a>
+                                <a class="nav-link" asp-area="" asp-controller="Rentals" asp-action="Index">Kiralama Talepleri</a>
+                            </div>
+                            <div class="admin-menu-group">
+                                <h6>Hesap</h6>
+                                <form asp-action="Logout" asp-controller="Account" method="post" class="admin-logout-form">
+                                    <button type="submit" class="nav-link btn btn-link p-0 text-danger text-start">Çıkış</button>
                                 </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-action="Login" asp-controller="Account">Giriş Yap</a>
-                            </li>
-                        }
-                    </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </aside>
+            }
+            <main role="main" class="@((isSignedIn && User?.IsInRole("Admin") == true) ? "admin-main-content" : "col-12 admin-main-content") py-3">
+                <div class="container-fluid px-4">
+                    @RenderBody()
                 </div>
-            </div>
-        </nav>
-        @if (overdueRentalCount > 0)
-        {
-            <div class="overdue-site-warning" role="alert">
-                <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
-                    <strong>Gecikmiş iadeniz var!</strong>
-                    <span>@overdueRentalCount adet CD'nin iade tarihi geçti. Lütfen en kısa sürede iade işlemi başlatın.</span>
-                    <a asp-controller="Rentals" asp-action="Index" class="btn btn-light btn-sm">Kiralamalarımı Gör</a>
-                </div>
-            </div>
-        }
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            </main>
     </div>
 
     <footer class="border-top footer text-muted">

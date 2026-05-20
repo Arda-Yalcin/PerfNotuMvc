@@ -239,3 +239,95 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.admin-shell {
+  min-height: 100vh;
+  position: relative;
+}
+
+.admin-sidebar {
+  background: #0f172a;
+  color: #e2e8f0;
+  width: 18.5rem;
+  max-width: 18.5rem;
+  height: 100vh;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.4rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1020;
+}
+
+.admin-panel-header h5 {
+  margin-bottom: 0.25rem;
+  color: #f8fafc;
+}
+
+.admin-panel-header p {
+  margin-bottom: 1rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.admin-menu-group + .admin-menu-group {
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-menu-group h6 {
+  margin-bottom: 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.admin-menu .nav-link {
+  color: #e2e8f0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.65rem;
+  margin-bottom: 0.25rem;
+}
+
+.admin-menu .nav-link:hover,
+.admin-menu .nav-link.active {
+  background: rgba(148, 163, 184, 0.14);
+  color: #ffffff;
+}
+
+.admin-main-content {
+  background: transparent;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.admin-shell > .admin-sidebar + .admin-main-content {
+  margin-left: 18.5rem;
+}
+
+@media (max-width: 767px) {
+  .admin-shell > .admin-sidebar + .admin-main-content {
+    margin-left: 0;
+  }
+}
+
+.admin-logout-form {
+  display: inline-block;
+  margin: 0;
+}
+
+.admin-logout-form button {
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 767px) {
+  .admin-sidebar {
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+

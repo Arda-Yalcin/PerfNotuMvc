@@ -18,7 +18,7 @@ namespace MuzikSitesi.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchTerm)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // Admin tum kiralamalari, uye sadece kendi kiralamalarini gorur.
@@ -31,6 +31,15 @@ namespace MuzikSitesi.Controllers
             if (User?.IsInRole("Admin") != true)
             {
                 query = query.Where(r => r.AppUserId == userId);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var normalized = $"%{searchTerm.Trim().ToLower()}%";
+                query = query.Where(r =>
+                    EF.Functions.Like((r.AppUser.Ad + " " + r.AppUser.Soyad).ToLower(), normalized)
+                    || EF.Functions.Like(r.AppUser.Email.ToLower(), normalized)
+                    || EF.Functions.Like(r.AppUser.UserName.ToLower(), normalized));
+                ViewData["SearchTerm"] = searchTerm.Trim();
             }
 
             var rentals = query

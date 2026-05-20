@@ -6,9 +6,30 @@
         && !r.IsReturned
         && ((r.DueDate.HasValue && r.DueDate.Value < DateTime.UtcNow)
             || (!r.DueDate.HasValue && r.ApprovalDate.HasValue && r.ApprovalDate.Value.AddDays(15) < DateTime.UtcNow)));
+    var searchTerm = ViewData["SearchTerm"] as string;
 }
 
 <h2>@(isAdmin ? "Kiralama Talepleri" : "Kiralamalarım")</h2>
+@if (isAdmin)
+{
+    <form method="get" asp-action="Index" class="row g-2 align-items-center mb-3">
+        <div class="col-auto">
+            <label for="searchTerm" class="form-label visually-hidden">Üye Ara</label>
+            <input type="text" id="searchTerm" name="searchTerm" value="@searchTerm" class="form-control" placeholder="Kullanıcı adı, e-posta veya kullanıcı adı ara" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Ara</button>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            <div class="col-12">
+                <div class="alert alert-info mb-0">
+                    Aranan kullanıcı: <strong>@searchTerm</strong>. Sadece bu kullanıcının kiralama kayıtları gösteriliyor.
+                </div>
+            </div>
+        }
+    </form>
+}
 
 @if (TempData["Success"] != null)
 {
